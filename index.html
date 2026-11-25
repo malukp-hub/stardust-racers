@@ -91,7 +91,7 @@
   .credit{font-family:Inter,sans-serif;font-size:.7rem;color:rgba(169,191,227,.6);margin-top:14px}
   .credit a{color:inherit}
   a.credit{color:rgba(169,191,227,.6)}
-  .vcredit{position:absolute;left:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:3;font-size:.65rem;text-decoration:none;margin:0}
+  .vcredit{position:absolute;left:14px;top:max(26px,calc(env(safe-area-inset-top) + 12px));z-index:3;font-size:.65rem;text-decoration:none;margin:0}
 </style>
 </head>
 <body>
@@ -176,7 +176,7 @@
     <p class="hand" style="color:var(--star)">Aproveite a corrida pelas estrelas ✦</p>
   </div>
   <div id="count">3</div>
-  <video id="vid" src="stardust.mp4" poster="capa.jpg" playsinline preload="auto"></video>
+  <video id="vid" src="stardust.mp4" poster="capa.jpg" playsinline controls controlslist="nodownload" preload="auto"></video>
   <div id="end">
     <h2>Que volta! ✦</h2>
     <p>Você acabou de cruzar o céu na Stardust Racers.</p>
