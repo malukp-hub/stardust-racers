@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stardust Racers · Embarque</title>
+<meta name="description" content="Escaneie, embarque e conheça a Stardust Racers.">
+<meta name="theme-color" content="#0b1e3f">
+<meta property="og:title" content="Stardust Racers · Embarque">
+<meta property="og:description" content="Uma volta pelas estrelas.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1e3f; --navy2:#0f2a55; --line:rgba(190,215,255,.13);
+    --chalk:#eaf2ff; --soft:#a9bfe3; --star:#ffe9a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:Inter,system-ui,sans-serif;color:var(--chalk);
+    background:
+      linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,
+      linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px,
+      radial-gradient(ellipse at 50% 20%,var(--navy2),var(--navy) 70%);
+    background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+  }
+  .hand{font-family:"Architects Daughter",cursive}
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+  main{position:relative;z-index:1}
+
+  /* ---------- Embarque ---------- */
+  .hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 22px}
+  .tag{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--soft)}
+  h1{font-family:"Architects Daughter",cursive;font-weight:400;font-size:clamp(2.6rem,11vw,5.4rem);line-height:1;margin:14px 0 10px;letter-spacing:.04em;text-shadow:0 0 24px rgba(160,200,255,.35)}
+  .lead{max-width:30ch;font-size:1.08rem;line-height:1.55;color:var(--soft);margin:6px auto 30px}
+  .btn{appearance:none;border:2px solid var(--chalk);background:rgba(234,242,255,.06);color:var(--chalk);font:600 1.1rem Inter,sans-serif;padding:16px 36px;border-radius:999px;cursor:pointer;letter-spacing:.06em;transition:.2s;box-shadow:0 0 0 0 rgba(255,233,168,.5);animation:pulse 2.4s infinite}
+  .btn:active{transform:scale(.97)}
+  .btn.ghost{animation:none;border-color:var(--line);font-size:.95rem;padding:12px 24px;color:var(--soft)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,233,168,.45)}70%{box-shadow:0 0 0 18px rgba(255,233,168,0)}100%{box-shadow:0 0 0 0 rgba(255,233,168,0)}}
+  .lead span{display:block;margin-bottom:10px}
+  .lead span:first-child{color:var(--chalk);font-weight:600}
+  .choices{display:flex;flex-direction:row;gap:10px;justify-content:center;width:100%;max-width:440px}
+  .choices .btn{flex:1;padding:14px 12px;font-size:.95rem;line-height:1.3;letter-spacing:.03em;border-radius:18px;text-align:center;border-width:2px}
+  .choices .btn.ghost{border-color:rgba(190,215,255,.4);color:var(--chalk)}
+  a.btn{text-decoration:none;display:inline-block}
+  .visit{text-align:center;border:1px solid rgba(255,233,168,.35);border-radius:20px;padding:34px 22px;background:rgba(11,30,63,.6);box-shadow:0 0 40px rgba(255,233,168,.08)}
+  .info{list-style:none;max-width:380px;margin:14px auto 26px;text-align:left}
+  .info li{display:flex;flex-direction:column;gap:2px;padding:12px 0;border-bottom:1px dashed rgba(190,215,255,.2);line-height:1.45}
+  .info li:last-child{border-bottom:0}
+  .info span{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+  .visit .btn{animation:none;font-size:1rem}
+
+  /* ---------- Overlay (segurança + contagem + vídeo) ---------- */
+  #ride{position:fixed;inset:0;z-index:50;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px}
+  #ride.on{display:flex}
+  .safety{max-width:32ch}
+  .safety p{font-size:1.25rem;line-height:1.5;margin:10px 0}
+  .safety .tag{margin-bottom:12px}
+  #count{font-family:"Architects Daughter",cursive;font-size:9rem;line-height:1;display:none;color:var(--star);text-shadow:0 0 40px rgba(255,233,168,.6)}
+  #count.pop{animation:pop .9s ease-out}
+  @keyframes pop{from{transform:scale(1.8);opacity:0}30%{opacity:1}to{transform:scale(1);opacity:.85}}
+  video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none}
+  #close{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;z-index:3;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:999px;width:42px;height:42px;font-size:1.2rem;cursor:pointer}
+  #end{display:none;position:relative;z-index:2}
+  #end h2{font-family:"Architects Daughter",cursive;font-weight:400;font-size:2.6rem;margin-bottom:8px}
+  #end p{color:var(--soft);margin-bottom:26px}
+  #end .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+  /* ---------- Projeto ---------- */
+  section{max-width:880px;margin:0 auto;padding:70px 22px}
+  h2.sec{font-family:"Architects Daughter",cursive;font-weight:400;font-size:2.2rem;margin-bottom:6px}
+  .sub{color:var(--soft);margin-bottom:28px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat{border:1px solid var(--line);background:rgba(11,30,63,.55);border-radius:14px;padding:18px 16px;backdrop-filter:blur(2px)}
+  .stat b{display:block;font-size:1.65rem;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+  .stat small{color:var(--soft);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em}
+  .stat i{display:block;font-style:normal;color:var(--soft);font-size:.85rem;margin-top:2px}
+  .track{list-style:none;position:relative;margin-left:12px;border-left:2px dashed rgba(190,215,255,.35)}
+  .track li{position:relative;padding:0 0 26px 26px}
+  .track li::before{content:"";position:absolute;left:-8px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--navy);border:2px solid var(--star);box-shadow:0 0 10px rgba(255,233,168,.6)}
+  .track h3{font-family:"Architects Daughter",cursive;font-weight:400;font-size:1.35rem}
+  .track p{color:var(--soft);line-height:1.55;margin-top:4px}
+
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+  .facts div{border:1px solid var(--line);border-radius:14px;padding:16px;background:rgba(11,30,63,.55);line-height:1.5;color:var(--soft)}
+  .facts strong{color:var(--chalk)}
+  footer{text-align:center;padding:40px 22px 60px;color:var(--soft)}
+  .credit{font-family:Inter,sans-serif;font-size:.7rem;color:rgba(169,191,227,.6);margin-top:14px}
+  .credit a{color:inherit}
+  a.credit{color:rgba(169,191,227,.6)}
+  .vcredit{position:absolute;left:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:3;font-size:.65rem;text-decoration:none;margin:0}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<main>
+
+  <!-- EMBARQUE -->
+  <header class="hero">
+    <div class="tag">Celestial Park · Epic Universe · Orlando</div>
+    <h1>Stardust Racers</h1>
+    <p class="lead"><span>Do quadro para os trilhos.</span><span>O quadro que te trouxe até aqui guarda um sonho que corre entre as estrelas.</span><span>Por onde você quer começar?</span></p>
+    <div class="choices">
+      <button class="btn" id="board">Sentir a experiência ✦</button>
+      <a class="btn ghost" href="#projeto">Conhecer de perto ↓</a>
+    </div>
+  </header>
+
+  <!-- FICHA TÉCNICA -->
+  <section id="projeto">
+    <h2 class="sec">Ficha técnica</h2>
+    <p class="sub">Os números por trás do quadro.</p>
+    <div class="grid">
+      <div class="stat"><small>Velocidade</small><b>100 km/h</b><i>62 mph</i></div>
+      <div class="stat"><small>Altura</small><b>40,5 m</b><i>133 ft</i></div>
+      <div class="stat"><small>Percurso</small><b>1.524 m</b><i>5.000 ft</i></div>
+      <div class="stat"><small>Duração</small><b>1:35</b><i>minutos</i></div>
+      <div class="stat"><small>Inversões</small><b>1</b><i>Celestial Spin</i></div>
+      <div class="stat"><small>Por trem</small><b>20</b><i>pessoas</i></div>
+    </div>
+  </section>
+
+  <!-- PERCURSO -->
+  <section>
+    <h2 class="sec">O percurso</h2>
+    <p class="sub">Cada ponto marcado no quadro, na ordem em que você passa por ele.</p>
+    <ul class="track">
+      <li><h3>Dual Station</h3><p>A estação dupla. Dois trens saem lado a lado, ao mesmo tempo: é uma montanha-russa de corrida, com dois trilhos que se entrelaçam o tempo todo.</p></li>
+      <li><h3>LSM Launch</h3><p>O primeiro lançamento. Motores lineares (LSM) empurram o trem com ímãs, sem correntes e sem subida lenta: você sai da estação já ganhando velocidade.</p></li>
+      <li><h3>Hill</h3><p>A colina. Lá em cima vem aquele frio na barriga de quase sair do assento.</p></li>
+      <li><h3>LSM Boost</h3><p>Um segundo lançamento no meio do caminho, para dar mais um empurrão quando você acha que acabou.</p></li>
+      <li><h3>Celestial Spin</h3><p>O ponto alto. Os dois trens sobem juntos e giram um em volta do outro, de cabeça para baixo, como duas estrelas cadentes se cruzando no céu.</p></li>
+    </ul>
+  </section>
+
+  <!-- CURIOSIDADES -->
+  <section>
+    <h2 class="sec">Curiosidades</h2>
+    <p class="sub">Para contar para alguém depois da volta.</p>
+    <div class="facts">
+      <div><strong>Estrelas de verdade?</strong> Os carrinhos são cobertos de luzes. À noite, com o trilho apagado, parecem estrelas cadentes cruzando o parque.</div>
+      <div><strong>Quem fez:</strong> a Mack Rides, fabricante alemã de montanhas-russas. O parque é o Universal Epic Universe, em Orlando.</div>
+      <div><strong>Inauguração:</strong> 22 de maio de 2025, junto com a abertura do parque.</div>
+      <div><strong>Nome trocado:</strong> antes de abrir, ela se chamava <em>Starfall Racers</em>, e teve o nome mudado para Stardust Racers.</div>
+      <div><strong>Premiada:</strong> eleita a Melhor Montanha-Russa Nova de 2025 pela revista Amusement Today.</div>
+      <div><strong>Recordista da casa:</strong> é a mais rápida e a mais alta do Epic Universe, e a de maior percurso de toda a Universal Orlando.</div>
+    </div>
+  </section>
+
+  <!-- VISITE DE VERDADE -->
+  <section>
+    <div class="visit">
+      <h2 class="sec">Ela existe de verdade</h2>
+      <ul class="info">
+        <li><span>Onde fica</span>Celestial Park, logo na entrada do Universal Epic Universe</li>
+        <li><span>Cidade</span>Orlando, Flórida · EUA</li>
+        <li><span>Altura mínima</span>122 cm</li>
+      </ul>
+      <a class="btn" href="https://www.universalorlando.com/web/pt/br/things-to-do/rides-attractions/stardust-racers" target="_blank" rel="noopener">Site oficial da Universal ↗</a>
+    </div>
+  </section>
+
+  <div style="height:40px"></div>
+</main>
+
+<!-- OVERLAY DO PASSEIO -->
+<div id="ride" aria-live="polite">
+  <button id="close" aria-label="Fechar">✕</button>
+  <div class="safety" id="safety">
+    <div class="tag">Aviso de segurança</div>
+    <p>Abaixe a barra de proteção.</p>
+    <p>Mantenha braços e pernas dentro do carrinho.</p>
+    <p class="hand" style="color:var(--star)">Aproveite a corrida pelas estrelas ✦</p>
+  </div>
+  <div id="count">3</div>
+  <video id="vid" src="stardust.mp4" poster="capa.jpg" playsinline preload="auto"></video>
+  <div id="end">
+    <h2>Que volta! ✦</h2>
+    <p>Você acabou de cruzar o céu na Stardust Racers.</p>
+    <div class="row">
+      <button class="btn" id="again">Repetir</button>
+      <button class="btn ghost" id="know">Conhecer a Stardust de perto</button>
+    </div>
+  </div>
+  <a class="credit vcredit" href="https://www.youtube.com/watch?v=Ffl-WOno2yM" target="_blank" rel="noopener">Fonte do vídeo: YouTube</a>
+</div>
+
+<script>
+/* Céu estrelado */
+(function(){
+  const c=document.getElementById('stars'),x=c.getContext('2d');let s=[];
+  function size(){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;
+    s=Array.from({length:Math.round(innerWidth*innerHeight/5000)},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4*devicePixelRatio+.2,t:Math.random()*6}))}
+  let shoot=null;
+  function draw(){x.clearRect(0,0,c.width,c.height);
+    for(const p of s){p.t+=.02;x.globalAlpha=.35+.65*Math.abs(Math.sin(p.t));x.fillStyle='#eaf2ff';x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+    if(!shoot&&Math.random()<.006)shoot={x:Math.random()*c.width,y:Math.random()*c.height*.4,l:0};
+    if(shoot){shoot.l+=14*devicePixelRatio;const g=x.createLinearGradient(shoot.x+shoot.l,shoot.y+shoot.l*.45,shoot.x+shoot.l-120,shoot.y+shoot.l*.45-54);
+      g.addColorStop(0,'rgba(255,233,168,.9)');g.addColorStop(1,'rgba(255,233,168,0)');x.globalAlpha=1;x.strokeStyle=g;x.lineWidth=2*devicePixelRatio;
+      x.beginPath();x.moveTo(shoot.x+shoot.l,shoot.y+shoot.l*.45);x.lineTo(shoot.x+shoot.l-120,shoot.y+shoot.l*.45-54);x.stroke();if(shoot.l>c.width*.5)shoot=null}
+    requestAnimationFrame(draw)}
+  addEventListener('resize',size);size();draw();
+})();
+
+/* Passeio */
+const ride=document.getElementById('ride'),safety=document.getElementById('safety'),count=document.getElementById('count'),
+      vid=document.getElementById('vid'),end=document.getElementById('end');
+let timers=[];
+function clear(){timers.forEach(clearTimeout);timers=[]}
+function show(el,on){el.style.display=on?(el===vid?'block':(el===count?'block':'')):'none'}
+
+function board(){
+  clear();ride.classList.add('on');document.body.style.overflow='hidden';
+  show(safety,true);show(count,false);show(vid,false);show(end,false);
+  // destrava o som no celular: o vídeo precisa começar a partir de um toque
+  vid.muted=false;vid.currentTime=0;vid.play().then(()=>vid.pause()).catch(()=>{});
+  timers.push(setTimeout(()=>{show(safety,false);show(count,true);tick(3)},3800));
+}
+function tick(n){
+  if(n===0){show(count,false);start();return}
+  count.textContent=n;count.classList.remove('pop');void count.offsetWidth;count.classList.add('pop');
+  if(navigator.vibrate)navigator.vibrate(60);
+  timers.push(setTimeout(()=>tick(n-1),1000));
+}
+function start(){
+  show(vid,true);vid.currentTime=0;
+  vid.play().catch(()=>{vid.muted=true;vid.play()});
+}
+vid.addEventListener('ended',()=>{show(vid,false);show(end,true)});
+function closeRide(){clear();vid.pause();ride.classList.remove('on');document.body.style.overflow=''}
+
+document.getElementById('board').onclick=board;
+
+document.getElementById('again').onclick=board;
+document.getElementById('close').onclick=closeRide;
+document.getElementById('know').onclick=()=>{closeRide();document.getElementById('projeto').scrollIntoView()};
+</script>
+</body>
+</html>
